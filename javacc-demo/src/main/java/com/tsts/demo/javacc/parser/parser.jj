@@ -1,0 +1,61 @@
+PARSER_BEGIN(SimpleArithmeticParser)
+
+public class SimpleArithmeticParser {
+
+  public static void main(String[] args) throws ParseException {
+    System.out.println("Enter an expression: ");
+    SimpleArithmeticParser parser = new SimpleArithmeticParser(System.in);
+    try {
+        parser.Input(); // Entry point to start parsing
+        System.out.println("Expression parsed successfully.");
+    } catch (Exception e) {
+        System.out.println("Failed to parse expression: " + e.getMessage());
+    }
+  }
+}
+
+PARSER_END(SimpleArithmeticParser)
+
+SKIP :
+{
+  " " | "\t" | "\n" | "\r" // Ignore whitespace
+}
+
+TOKEN :
+{
+  < PLUS: "+" > |
+  < MINUS: "-" > |
+  < MULT: "*" > |
+  < DIV: "/" > |
+  < NUMBER: (["0"-"9"])+ > // Match any sequence of digits
+}
+
+void Input() :
+{}
+{
+  Expression() // Call to start parsing an expression
+}
+
+void Expression() :
+{}
+{
+  Term()
+  (
+    ( <PLUS> | <MINUS> ) Term()
+  )*
+}
+
+void Term() :
+{}
+{
+  Factor()
+  (
+    ( <MULT> | <DIV> ) Factor()
+  )*
+}
+
+void Factor() :
+{}
+{
+  <NUMBER>
+}
